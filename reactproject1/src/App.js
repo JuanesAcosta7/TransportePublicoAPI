@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RutasList from './Components/RutasList.js';
 import VerTiempoLlegada from './Components/VerTiempoLlegada.js';
 import SeleccionarRuta from './Components/SeleccionarRuta.js';
-import BusLocation from './Components/BusLocation.js'; 
+import BusLocation from './Components/BusLocation.js';
 import './App.css';
 
 const App = () => {
@@ -11,6 +11,17 @@ const App = () => {
     const handleRutaSelect = (id) => {
         setRutaId(id);
     };
+
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "//code.tidio.co/e0osth7rsc9yhz5h18msxqmxgategml9.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
 
     return (
         <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-start px-6 py-12">
@@ -43,7 +54,6 @@ const App = () => {
                 <div className="bg-gray-700 p-6 rounded-xl shadow-md border border-gray-600">
                     <h2 className="text-2xl font-semibold text-gray-100 mb-4">Ubicación en Tiempo Real</h2>
                     <BusLocation />
-                    <script src="//code.tidio.co/e0osth7rsc9yhz5h18msxqmxgategml9.js" async></script>
                 </div>
             </div>
         </div>
@@ -51,4 +61,3 @@ const App = () => {
 };
 
 export default App;
-
