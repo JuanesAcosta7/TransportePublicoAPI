@@ -1,4 +1,4 @@
-﻿namespace TransportePublicoAPI.Models
+﻿    namespace TransportePublicoAPI.Models
 {
     public class Tiempo
     {

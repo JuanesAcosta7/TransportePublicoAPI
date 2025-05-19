@@ -43,6 +43,7 @@ const App = () => {
                 <div className="bg-gray-700 p-6 rounded-xl shadow-md border border-gray-600">
                     <h2 className="text-2xl font-semibold text-gray-100 mb-4">Ubicación en Tiempo Real</h2>
                     <BusLocation />
+                    <script src="//code.tidio.co/e0osth7rsc9yhz5h18msxqmxgategml9.js" async></script>
                 </div>
             </div>
         </div>
