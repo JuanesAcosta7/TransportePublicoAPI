@@ -51,10 +51,10 @@ const App = () => {
                     </div>
                 )}
 
-                <div className="bg-gray-700 p-6 rounded-xl shadow-md border border-gray-600">
+                {/*<div className="bg-gray-700 p-6 rounded-xl shadow-md border border-gray-600">
                     <h2 className="text-2xl font-semibold text-gray-100 mb-4">Ubicación en Tiempo Real</h2>
                     <BusLocation />
-                </div>
+                </div>*/}
             </div>
         </div>
     );
