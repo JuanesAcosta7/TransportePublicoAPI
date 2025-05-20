@@ -27,7 +27,7 @@ const App = () => {
         <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-start px-6 py-12">
             <div className="bg-gray-800 shadow-xl rounded-2xl p-8 max-w-5xl w-full space-y-8 border-l-8 border-gray-600">
                 <h1 className="text-4xl font-extrabold text-center text-indigo-400 tracking-wide mb-6">
-                    <span className="text-indigo-500">Sistema</span> de Transporte Público
+                    <span className="text-indigo-500">Sistema</span> de Transporte Publico
                 </h1>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
