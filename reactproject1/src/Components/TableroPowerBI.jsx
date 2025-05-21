@@ -8,7 +8,7 @@ const TableroPowerBI = () => {
                 <h1 className="text-3xl font-bold text-center text-indigo-400 mb-6">
                     Tablero de Control Power BI
                 </h1>
-                <iframe title="tableroFin" width="1000" height="1003.5" src="https://app.powerbi.com/view?r=eyJrIjoiNzIyN2UyOTctMWQzNC00NTc2LTljOWUtZDM1MDI0ZTYzNzc4IiwidCI6IjA3ZGE2N2EwLTFmNDMtNGU4Yy05NzdmLTVmODhiNjQ3MGVlNiIsImMiOjR9" frameborder="0" allowFullScreen="true"></iframe>
+                <iframe title="tableroFin" width="1000" height="3000.5" src="https://app.powerbi.com/view?r=eyJrIjoiNzIyN2UyOTctMWQzNC00NTc2LTljOWUtZDM1MDI0ZTYzNzc4IiwidCI6IjA3ZGE2N2EwLTFmNDMtNGU4Yy05NzdmLTVmODhiNjQ3MGVlNiIsImMiOjR9" frameborder="0" allowFullScreen="true"></iframe>
             </div>
         </div>
     );

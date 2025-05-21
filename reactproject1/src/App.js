@@ -48,7 +48,7 @@ const App = () => {
         </div>
     );
 
-    return(
+    return (
         <Router>
             <Routes>
                 <Route path="/" element={<Principal />} />
@@ -59,3 +59,4 @@ const App = () => {
 };
 
 export default App;
+
