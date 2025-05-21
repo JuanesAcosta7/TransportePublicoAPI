@@ -18,6 +18,13 @@ function SeleccionarRuta({ onRutaSeleccionada }) {
     };
 
     return (
+        <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center px-6 py-12">
+            <div className="bg-gray-800 p-6 rounded-2xl shadow-xl w-full max-w-6xl border-l-8 border-indigo-600">
+                <h1 className="text-3xl font-bold text-center text-indigo-400 mb-6">
+                    Tablero de Control Power BI
+                </h1>
+                <iframe title="tableroFin" width="1000" height="1003.5" src="https://app.powerbi.com/view?r=eyJrIjoiNzIyN2UyOTctMWQzNC00NTc2LTljOWUtZDM1MDI0ZTYzNzc4IiwidCI6IjA3ZGE2N2EwLTFmNDMtNGU4Yy05NzdmLTVmODhiNjQ3MGVlNiIsImMiOjR9" frameborder="0" allowFullScreen="true"></iframe>
+            </div>
         <div className="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-600">
             <h2 className="text-2xl font-semibold text-gray-100 mb-4">Selecciona una Ruta</h2>
             <div className="relative">
@@ -38,7 +45,7 @@ function SeleccionarRuta({ onRutaSeleccionada }) {
                         Has seleccionado la ruta con ID: {rutaSeleccionada}
                     </p>
                 )}
-                <div className="mt-4 text-center">
+                {/* <div className="mt-4 text-center">
                     <button
                         onClick={() => {
 
@@ -49,7 +56,7 @@ function SeleccionarRuta({ onRutaSeleccionada }) {
                         
                     >
                         Ir al Tablero Power BI
-                    </button>
+                    </button>*/}
                 </div>
             </div>
         </div>
