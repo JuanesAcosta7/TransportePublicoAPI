@@ -3,36 +3,59 @@ import axios from 'axios';
 
 const VerTiempoLlegada = () => {
     const [fact, setFact] = useState(null);
+    const [ruta, setRuta] = useState(null);
+    const [tiempo, setTiempo] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // Paso 1: Obtener lista de facts
         axios.get('https://backfin1.somee.com/api/FactUbicacionVehiculo')
             .then(response => {
                 const facts = response.data;
-                console.log('Datos recibidos:', facts);
+                if (facts.length === 0) {
+                    setLoading(false);
+                    return;
+                }
 
-                // Tomar el primer registro disponible sin filtrar
-                const factPrimer = facts[0] || null;
-                console.log('Fact seleccionado:', factPrimer);
-
+                const factPrimer = facts[0];
                 setFact(factPrimer);
+
+                // Paso 2: Obtener detalles de ruta y tiempo usando las llaves
+                // Usar Promise.all para hacer las dos peticiones en paralelo
+                return Promise.all([
+                    axios.get(`https://backfin1.somee.com/api/DimRuta/${factPrimer.rutaKey}`),
+                    axios.get(`https://backfin1.somee.com/api/DimTiempo/${factPrimer.tiempoKey}`)
+                ]);
             })
-            .catch(error => console.error('Error cargando datos de FactUbicacionVehiculo:', error));
+            .then(([rutaRes, tiempoRes]) => {
+                if (rutaRes && tiempoRes) {
+                    setRuta(rutaRes.data);
+                    setTiempo(tiempoRes.data);
+                }
+            })
+            .catch(error => {
+                console.error('Error cargando datos:', error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }, []);
 
     const calcularHorarios = () => {
-        if (!fact) return [];
+        if (!ruta || !tiempo) return [];
 
-        const nombreRuta = fact?.ruta?.nombre || '';
+        const nombreRuta = ruta.nombre || '';
         const paradas = nombreRuta.split(' - ');
         if (paradas.length < 2) return [];
 
         const horaInicioDate = new Date();
-        horaInicioDate.setHours(fact.tiempo?.hora || 6);
-        horaInicioDate.setMinutes(fact.tiempo?.minuto || 0);
+        // Asumiendo que tiempo.hora y tiempo.minuto existen y son numéricos
+        horaInicioDate.setHours(tiempo.hora || 6);
+        horaInicioDate.setMinutes(tiempo.minuto || 0);
         horaInicioDate.setSeconds(0);
 
-        const frecuenciaMinutos = 10;
-        const tiempoTotal = 40; // Aquí deberías ajustar si tienes tiempo total real
+        const frecuenciaMinutos = 10; // podrías usar tiempo.frecuencia si existe
+        const tiempoTotal = 40; // ajustar con datos reales si hay
         const duracionEntreParadas = tiempoTotal / (paradas.length - 1);
 
         const horariosPorSalida = [];
@@ -59,9 +82,14 @@ const VerTiempoLlegada = () => {
     return (
         <div className="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-600 mt-4">
             <h3 className="text-2xl font-semibold text-gray-100 mb-4">Horarios estimados por parada</h3>
-            {!fact ? (
-                <p className="text-lg text-gray-400">Cargando datos...</p>
-            ) : (
+
+            {loading && <p className="text-lg text-gray-400">Cargando datos...</p>}
+
+            {!loading && !ruta && !tiempo && (
+                <p className="text-red-400">No se pudo cargar la información de ruta o tiempo.</p>
+            )}
+
+            {!loading && ruta && tiempo && (
                 horarios.length > 0 ? (
                     horarios.map((salida, idx) => (
                         <div key={idx} className="mb-4">
