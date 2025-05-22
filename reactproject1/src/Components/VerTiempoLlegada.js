@@ -2,56 +2,41 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const VerTiempoLlegada = ({ rutaId }) => {
-    const [hecho, setHecho] = useState(null);
+    const [fact, setFact] = useState(null);
 
     useEffect(() => {
         if (rutaId) {
-            axios.get('https://transportepublicoapi.somee.com/api/Hechos')
+            axios.get('https://backfin1.somee.com/api/FactUbicacionVehiculo')
                 .then(response => {
-                    const hechos = response.data;
-                    const hechoFiltrado = hechos.find(h => h.ruta.id === parseInt(rutaId));
-                    setHecho(hechoFiltrado || null);
+                    const facts = response.data;
+                    const factFiltrado = facts.find(f => f.ruta?.rutaId === parseInt(rutaId));
+                    setFact(factFiltrado || null);
                 })
-                .catch(error => console.error('Error cargando los datos de hechos:', error));
+                .catch(error => console.error('Error cargando datos de FactUbicacionVehiculo:', error));
         }
     }, [rutaId]);
 
-    const formatearHora = (horaStr) => {
-        if (!horaStr || typeof horaStr !== 'string') return null;
-        const partes = horaStr.trim().split(':');
-        if (partes.length < 2) return null;
-        const horas = partes[0].padStart(2, '0');
-        const minutos = partes[1].padStart(2, '0');
-        return `${horas}:${minutos}`;
-    };
-
     const calcularHorarios = () => {
-        if (!hecho) return [];
+        if (!fact) return [];
 
-        const nombreRuta = hecho?.ruta?.nombreRuta;
-        const paradas = nombreRuta?.split(' - ') || [];
-        const horaInicioStr = formatearHora(hecho?.tiempo?.horaInicioLunesASabado);
-        const frecuencia = hecho?.frecuencia?.frecuenciaLunesASabado;
-        const tiempoTotal = hecho?.tiempoTotalMinutosLunesASab;
+        const nombreRuta = fact?.ruta?.nombre || '';
+        const paradas = nombreRuta.split(' - ');
+        if (paradas.length < 2) return [];
 
-        console.log("Hora Inicio:", horaInicioStr);
-        console.log("Frecuencia:", frecuencia);
-        console.log("Tiempo Total:", tiempoTotal);
-        console.log("Paradas:", paradas);
+        // Estimar hora de inicio con base en tiempo.hora y tiempo.minuto
+        const horaInicioDate = new Date();
+        horaInicioDate.setHours(fact.tiempo?.hora || 6);
+        horaInicioDate.setMinutes(fact.tiempo?.minuto || 0);
+        horaInicioDate.setSeconds(0);
 
-        if (!horaInicioStr || !frecuencia || !tiempoTotal || paradas.length < 2) return [];
-
-        const horaInicioDate = new Date(`1970-01-01T${horaInicioStr}:00`);
-        if (isNaN(horaInicioDate.getTime())) {
-            console.error('Fecha inválida al construir hora de inicio:', horaInicioStr);
-            return [];
-        }
+        const frecuenciaMinutos = 10; // Valor arbitrario si no se tiene un campo de frecuencia
+        const tiempoTotal = 40; // Valor estimado total del recorrido
 
         const duracionEntreParadas = tiempoTotal / (paradas.length - 1);
         const horariosPorSalida = [];
 
         for (let i = 0; i < 10; i++) {
-            const salida = new Date(horaInicioDate.getTime() + i * frecuencia * 60000);
+            const salida = new Date(horaInicioDate.getTime() + i * frecuenciaMinutos * 60000);
 
             const horariosParada = paradas.map((parada, index) => {
                 const llegada = new Date(salida.getTime() + index * duracionEntreParadas * 60000);
@@ -72,8 +57,8 @@ const VerTiempoLlegada = ({ rutaId }) => {
     return (
         <div className="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-600 mt-4">
             <h3 className="text-2xl font-semibold text-gray-100 mb-4">Horarios estimados por parada</h3>
-            {!hecho ? (
-                <p className="text-lg text-gray-400">Cargando...</p>
+            {!fact ? (
+                <p className="text-lg text-gray-400">Cargando datos...</p>
             ) : (
                 horarios.length > 0 ? (
                     horarios.map((salida, idx) => (
@@ -89,7 +74,7 @@ const VerTiempoLlegada = ({ rutaId }) => {
                         </div>
                     ))
                 ) : (
-                    <p className="text-red-400">No se pudo calcular el horario. Revisa los datos de la ruta.</p>
+                    <p className="text-red-400">No se pudo calcular el horario. Revisa los datos.</p>
                 )
             )}
         </div>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api.js'; // Asegúrate de usar tu archivo api.js configurado con Axios
 
 const RutasList = () => {
     const [rutas, setRutas] = useState([]);
 
     useEffect(() => {
-        axios.get('https://transportepublicoapi.somee.com/api/Ruta')  // Cambia la URL si es diferente
+        API.get('/DimRuta')
             .then(response => setRutas(response.data))
             .catch(error => console.error('Error cargando las rutas:', error));
     }, []);
@@ -16,11 +16,12 @@ const RutasList = () => {
             <ul className="space-y-4">
                 {rutas.map((ruta) => (
                     <li
-                        key={ruta.id}
+                        key={ruta.rutaKey}
                         className="bg-gray-700 hover:bg-indigo-600 rounded-lg p-4 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105"
                     >
-                        <p className="text-gray-200 font-semibold">{ruta.nombreRuta}</p>
-                        <p className="text-gray-400 text-sm">De {ruta.estacionInicio} a {ruta.estacionFin}</p>
+                        <p className="text-gray-200 font-semibold">{ruta.nombre}</p>
+                        <p className="text-gray-400 text-sm">Sentido: {ruta.sentido}</p>
+                        <p className="text-gray-400 text-sm">Estado: {ruta.activa ? 'Activa' : 'Inactiva'}</p>
                     </li>
                 ))}
             </ul>
@@ -29,4 +30,3 @@ const RutasList = () => {
 };
 
 export default RutasList;
-
