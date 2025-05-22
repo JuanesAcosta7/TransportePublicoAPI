@@ -19,21 +19,23 @@ const VerTiempoLlegada = () => {
     }, []);
 
     const calcularHorarios = () => {
-        if (!fact) return [];
+        if (!fact || !fact.tiempo || !fact.ruta) return [];
 
-        const nombreRuta = fact?.ruta?.nombre || '';
+        const nombreRuta = fact.ruta.nombre || '';
         const paradas = nombreRuta.split(' - ');
         if (paradas.length < 2) return [];
 
-        const horaInicioDate = new Date();
-        horaInicioDate.setHours(fact.tiempo?.hora || 6);
-        horaInicioDate.setMinutes(fact.tiempo?.minuto || 0);
+        // Obtener la hora real desde el objeto tiempo (viene del backend)
+        const horaInicioDate = new Date(fact.tiempo.fecha);
+        horaInicioDate.setHours(fact.tiempo.hora || 6);
+        horaInicioDate.setMinutes(fact.tiempo.minuto || 0);
         horaInicioDate.setSeconds(0);
 
-        const frecuenciaMinutos = 10;
-        const tiempoTotal = 40;
-        const duracionEntreParadas = tiempoTotal / (paradas.length - 1);
+        // ⚠️ Tiempo total estimado (puedes ajustar esto o traerlo del backend más adelante)
+        const tiempoTotal = 40; // en minutos
+        const frecuenciaMinutos = 10; // frecuencia de salida en minutos
 
+        const duracionEntreParadas = tiempoTotal / (paradas.length - 1);
         const horariosPorSalida = [];
 
         for (let i = 0; i < 10; i++) {
@@ -83,6 +85,7 @@ const VerTiempoLlegada = () => {
 };
 
 export default VerTiempoLlegada;
+ 
 
 
 
