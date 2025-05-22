@@ -8,34 +8,33 @@ const VerTiempoLlegada = () => {
         axios.get('https://backfin1.somee.com/api/FactUbicacionVehiculo')
             .then(response => {
                 const facts = response.data;
-                console.log('Datos recibidos:', facts.map(f => f.rutaKey)); // debug
+                console.log('Datos recibidos:', facts);
 
-                const factFiltrado = facts.find(f => f.rutaKey === 8137); // 👈 clave filtrada
-                console.log('Fact filtrado:', factFiltrado); // debug
+                // Tomar el primer registro disponible sin filtrar
+                const factPrimer = facts[0] || null;
+                console.log('Fact seleccionado:', factPrimer);
 
-                setFact(factFiltrado || null);
+                setFact(factPrimer);
             })
             .catch(error => console.error('Error cargando datos de FactUbicacionVehiculo:', error));
     }, []);
 
     const calcularHorarios = () => {
-        if (!fact || !fact.tiempo || !fact.ruta) return [];
+        if (!fact) return [];
 
-        const nombreRuta = fact.ruta.nombre || '';
+        const nombreRuta = fact?.ruta?.nombre || '';
         const paradas = nombreRuta.split(' - ');
         if (paradas.length < 2) return [];
 
-        // Obtener la hora real desde el objeto tiempo (viene del backend)
-        const horaInicioDate = new Date(fact.tiempo.fecha);
-        horaInicioDate.setHours(fact.tiempo.hora || 6);
-        horaInicioDate.setMinutes(fact.tiempo.minuto || 0);
+        const horaInicioDate = new Date();
+        horaInicioDate.setHours(fact.tiempo?.hora || 6);
+        horaInicioDate.setMinutes(fact.tiempo?.minuto || 0);
         horaInicioDate.setSeconds(0);
 
-        // ⚠️ Tiempo total estimado (puedes ajustar esto o traerlo del backend más adelante)
-        const tiempoTotal = 40; // en minutos
-        const frecuenciaMinutos = 10; // frecuencia de salida en minutos
-
+        const frecuenciaMinutos = 10;
+        const tiempoTotal = 40; // Aquí deberías ajustar si tienes tiempo total real
         const duracionEntreParadas = tiempoTotal / (paradas.length - 1);
+
         const horariosPorSalida = [];
 
         for (let i = 0; i < 10; i++) {
@@ -85,7 +84,3 @@ const VerTiempoLlegada = () => {
 };
 
 export default VerTiempoLlegada;
- 
-
-
-
