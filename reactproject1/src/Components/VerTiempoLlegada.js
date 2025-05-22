@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const VerTiempoLlegada = ({ rutaKey }) => {
+const VerTiempoLlegada = () => {
     const [fact, setFact] = useState(null);
 
     useEffect(() => {
-        if (rutaKey) {
-            axios.get('https://backfin1.somee.com/api/FactUbicacionVehiculo')
-                .then(response => {
-                    const facts = response.data;
-                    const factFiltrado = facts.find(f => f.rutaKey === parseInt(rutaKey));
-                    setFact(factFiltrado || null);
-                })
-                .catch(error => console.error('Error cargando datos de FactUbicacionVehiculo:', error));
-        }
-    }, [rutaKey]);
+        axios.get('https://backfin1.somee.com/api/FactUbicacionVehiculo')
+            .then(response => {
+                const facts = response.data;
+                console.log('Datos recibidos:', facts.map(f => f.rutaKey)); // debug
+
+                const factFiltrado = facts.find(f => f.rutaKey === 8137); // 👈 clave filtrada
+                console.log('Fact filtrado:', factFiltrado); // debug
+
+                setFact(factFiltrado || null);
+            })
+            .catch(error => console.error('Error cargando datos de FactUbicacionVehiculo:', error));
+    }, []);
 
     const calcularHorarios = () => {
         if (!fact) return [];
@@ -30,8 +32,8 @@ const VerTiempoLlegada = ({ rutaKey }) => {
 
         const frecuenciaMinutos = 10;
         const tiempoTotal = 40;
-
         const duracionEntreParadas = tiempoTotal / (paradas.length - 1);
+
         const horariosPorSalida = [];
 
         for (let i = 0; i < 10; i++) {
@@ -81,5 +83,6 @@ const VerTiempoLlegada = ({ rutaKey }) => {
 };
 
 export default VerTiempoLlegada;
+
 
 
