@@ -6,7 +6,7 @@ const BusLocation = () => {
 
     useEffect(() => {
         const connection = new HubConnectionBuilder()
-            .withUrl('https://transportepublicoapi.somee.com/bushub')
+            .withUrl('https://localhost:7272/bushub')
             .withAutomaticReconnect()
             .build();
 

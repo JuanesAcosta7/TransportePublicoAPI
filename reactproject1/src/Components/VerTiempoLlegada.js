@@ -9,7 +9,7 @@ const VerTiempoLlegada = () => {
 
     useEffect(() => {
         // Paso 1: Obtener lista de facts
-        axios.get('https://backfin1.somee.com/api/FactUbicacionVehiculo')
+        axios.get('https://localhost:7272/api/FactUbicacionVehiculo')
             .then(response => {
                 const facts = response.data;
                 if (facts.length === 0) {
@@ -23,8 +23,8 @@ const VerTiempoLlegada = () => {
                 // Paso 2: Obtener detalles de ruta y tiempo usando las llaves
                 // Usar Promise.all para hacer las dos peticiones en paralelo
                 return Promise.all([
-                    axios.get(`https://backfin1.somee.com/api/DimRuta/${factPrimer.rutaKey}`),
-                    axios.get(`https://backfin1.somee.com/api/DimTiempo/${factPrimer.tiempoKey}`)
+                    axios.get(`https://localhost:7272/api/DimRuta/${factPrimer.rutaKey}`),
+                    axios.get(`https://localhost:7272/api/DimTiempo/${factPrimer.tiempoKey}`)
                 ]);
             })
             .then(([rutaRes, tiempoRes]) => {
